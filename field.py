@@ -1,5 +1,4 @@
-from Stamp import Stamp
-
+from stamp import Stamp
 
 class Field:
     """
@@ -30,8 +29,7 @@ class Field:
         # リスト内包表記を用いて、2次元配列を作る　※2次元配列の各要素を異なるID（識別子）で作成可能
         self.my_field = [[0 for j in range(Field.field_x_size)] for i in range(Field.field_y_size)]
 
-    @classmethod
-    def press_stamp(self, Stamp_object, parallel_translation_x, parallel_translation_y, Field_object):
+    def press_stamp(self, Stamp_object, parallel_translation_x, parallel_translation_y):
         """
         my_fieldにスタンプを押す。
 
@@ -43,8 +41,6 @@ class Field:
             x軸方向に平行移動するx座標。
         parallel_translation_y : int
             y軸方向に平行移動するy座標。
-　　　　Field_object : Field
-            Fieldクラスのオブジェクト。
         """
 
         #  スタンプの黒いセルの座標リストを格納
@@ -55,15 +51,15 @@ class Field:
             candidate_press_x = press_tuple[1] + parallel_translation_x
             candidate_press_y = press_tuple[0] + parallel_translation_y
             #  スタンプを押す候補の座標が「0」の場合、「1」を代入
-            if Field_object.my_field[candidate_press_y][candidate_press_x] == 0:
-                Field_object.my_field[candidate_press_y][candidate_press_x] = 1
+            if self.my_field[candidate_press_y][candidate_press_x] == 0:
+                self.my_field[candidate_press_y][candidate_press_x] = 1
             #  スタンプを押す候補の座標が「1」の場合、「0」に代入
-            elif Field_object.my_field[candidate_press_y][candidate_press_x] == 1:
-                Field_object.my_field[candidate_press_y][candidate_press_x] = 0
+            elif self.my_field[candidate_press_y][candidate_press_x] == 1:
+                self.my_field[candidate_press_y][candidate_press_x] = 0
             else:
                 print("pass")
 
-        print(Field.my_field)
+        print(self.my_field)
 
     @classmethod
     def set_target_field(cls, target_field_information):
@@ -112,8 +108,8 @@ class Field:
 
 if __name__ == "__main__":
     # case 0
-    Field.set_target_field("7;6;10000000100000001000000010000000100000001000000011111111")
+    Field.set_target_field("7;6;100000001000000010000000100000001000000010")
     temp_field = Field()
     print(temp_field.num_of_matches_with_target_field())
     temp_stamp = Stamp(0, "4;3;000001100001")
-    Field.press_stamp(temp_stamp, 1, 2, temp_field)
+    temp_field.press_stamp(temp_stamp, 1, 2)
