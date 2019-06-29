@@ -1,5 +1,5 @@
-from Field import Field
-from Stamp import Stamp
+from src.model.field import Field
+from src.model.field import Stamp
 import sys
 
 
