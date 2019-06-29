@@ -30,6 +30,9 @@ class IO:
             stamp_object = Stamp(i, stamp_information.rstrip('\r\n'))
             cls.stamp_object_list.append(stamp_object)
 
+    # Solutionクラスのオブジェクトを受け取って標準出力に表示する
+    def output_solution(solution):
+        pass
 
 if __name__ == "__main__":
     temp_IO = IO()
