@@ -1,6 +1,6 @@
 class Instance:
     """
-    ラッパークラス。
+    stampクラスのオブジェクトリストを返すラッパークラス。
 
     Attributes
     ----------
