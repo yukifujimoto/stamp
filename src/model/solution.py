@@ -28,7 +28,7 @@ class Solution:
             Stampクラスのオブジェクト。
         """
 
-        self.stamp_answer_list(tuple(id, x, y))
+        self.stamp_answer_list.append(tuple(id, x, y))
 
     def get_stamp_answer_list(self):
         """
