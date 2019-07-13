@@ -32,7 +32,10 @@ class IO:
 
     # Solutionクラスのオブジェクトを受け取って標準出力に表示する
     def output_solution(solution):
-        pass
+        answer_list = solution.get_stamp_answer_list()
+        print(len(answer_list))
+        for triple in answer_list:
+            print(str(triple[0])+";"+str(triple[1])+","+str(triple[2]))
 
 if __name__ == "__main__":
     temp_IO = IO()
