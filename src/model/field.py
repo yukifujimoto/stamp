@@ -24,6 +24,7 @@ class Field:
     def __init__(self):
         """
         コンストラクタ。
+
         """
 
         # リスト内包表記を用いて、2次元配列を作る　※2次元配列の各要素を異なるID（識別子）で作成可能
@@ -43,13 +44,18 @@ class Field:
             y軸方向に平行移動するy座標。
         """
 
-        #  スタンプの黒いセルの座標リストを格納
+        #  スタンプの黒いセルの座標リストを取得
         press_black_cell_coordinate_list = Stamp_object.get_black_cell_coordinate()
 
         #  黒いセルの座標分、繰り返し処理
         for press_tuple in press_black_cell_coordinate_list:
             candidate_press_x = press_tuple[1] + parallel_translation_x
             candidate_press_y = press_tuple[0] + parallel_translation_y
+
+            #  スタンプを押す候補の座標がmyfield以外の座標を指定した場合、continueする
+            if candidate_press_x < 0 or candidate_press_y < 0 or candidate_press_x >= Field.field_x_size or candidate_press_y >= Field.field_y_size:
+                continue
+
             #  スタンプを押す候補の座標が「0」の場合、「1」を代入
             if self.my_field[candidate_press_y][candidate_press_x] == 0:
                 self.my_field[candidate_press_y][candidate_press_x] = 1
@@ -59,12 +65,10 @@ class Field:
             else:
                 print("pass")
 
-        print(self.my_field)
-
     @classmethod
     def set_target_field(cls, target_field_information):
         """
-        クラス変数（target_field、field_x_size、field_y_size）をセットする
+        クラス変数（target_field、field_x_size、field_y_size）をセットする。
 
 　　　　Parameters
     　　----------
@@ -77,7 +81,7 @@ class Field:
         cls.field_y_size = int(field_y_size_str)
         cls.field_x_size = int(field_x_size_str)
 
-        # リスト内包表記を使って2次元配列を作る　※二次元配列の各要素を異なるIDで作成可能
+        #  二次元配列targetfieidをセットする
         cls.target_field = [[0 for j in range(cls.field_x_size)] for i in range(cls.field_y_size)]
         current_position = 0
         for y in range(cls.field_y_size):
@@ -87,7 +91,7 @@ class Field:
 
     def num_of_matches_with_target_field(self):
         """
-        target_fieldとmy_fieldとの一致数を返す。
+        target_fieldとmy_fieldとの座標一致数を返す。
 
         Returns
         ----------
