@@ -1,3 +1,5 @@
+import sys
+sys.path.append('../')
 from src.model.instance import Instance
 from src.util.io import IO
 from src.algorithm.random_solver import RandomSolver
