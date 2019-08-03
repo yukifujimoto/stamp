@@ -1,6 +1,16 @@
 import time
 
-class StapWatch:
+
+class StopWatch:
+    """
+    処理時間を計算するクラス。
+
+    Attributes
+    ----------
+    start_time : int
+    処理時間を格納する変数。
+    """
+
     def __init__(self):
         self.start_time = 0
 
@@ -12,7 +22,7 @@ class StapWatch:
         return current_time - self.start_time
 
 if __name__=="__main__":
-    sw = StapWatch()
+    sw = StopWatch()
     sw.start()
     assert sw.get_elapsed_time() < 3, "error!"
     time.sleep(3)

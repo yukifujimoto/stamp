@@ -5,13 +5,13 @@ import sys
 
 class IO:
     """
-    お手本、スタンプの定義をインプットし、
-    solverクラスで処理できるデータ形式にアウトプットするクラス。
+    問題の情報（お手本、スタンプの定義）をインプット、
+    問題の解（スタンプを押す座標リスト）をアプトプットするクラス。
 
     Attributes
     ----------
     stamp_object_list : list of Stamp
-        Stampオブジェクトを格納するリスト。
+        Stampクラスのオブジェクトを格納するリスト。
     """
 
     stamp_object_list = []
@@ -19,22 +19,29 @@ class IO:
     @classmethod
     def input_problem(cls):
         """
-        お手本、スタンプの定義をインプットし、Field、Stampクラスに対して、情報を格納する
+        問題の情報（お手本、スタンプの定義）をField、Stampクラスにインプットする。
+
         """
 
         #  Fieldクラスのクラス変数にお手本の定義を格納
         Field.set_target_field(input())
 
-        #  スタンプの定義個数分、オブジェクトを生成しリストに追加する。
+        #  スタンプの定義個数分、Stampクラスのオブジェクトを生成しリストに追加
         for i, stamp_information in enumerate(sys.stdin):
             stamp_object = Stamp(i, stamp_information.rstrip('\r\n'))
             cls.stamp_object_list.append(stamp_object)
 
-    # Solutionクラスのオブジェクトを受け取って標準出力に表示する
+    # Solutionクラスのオブジェクトを受け取り、標準出力に表示
+    @staticmethod
     def output_solution(solution):
+        """
+        問題の情報（お手本、スタンプの定義）をし、Field、Stampクラスにインプットする。
+
+        """
+
         answer_list = solution.get_stamp_answer_list()
         print(len(answer_list))
-        for triple in answer_list:
+        for triple in (answer_list):
             print(str(triple[0])+";"+str(triple[1])+","+str(triple[2]))
 
 if __name__ == "__main__":
