@@ -6,7 +6,10 @@ from src.algorithm.random_solver import RandomSolver
 io = IO()
 io.input_problem()
 instance = Instance()
-instance.set_stamp_object(io.stamp_object_list)
+instance.set_origin_stamp_object(io.stamp_object_list)
+
+# できるだけ面積の小さいcombined stampの作成
+instance.make_combined_stamp_list()
 
 # ソルバーの生成 & 解の計算
 solver = RandomSolver() # ここを切り替えることによって実行するアルゴリズムを変更できる
