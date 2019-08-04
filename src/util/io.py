@@ -35,11 +35,21 @@ class IO:
     @staticmethod
     def output_solution(solution):
         """
-        問題の情報（お手本、スタンプの定義）をし、Field、Stampクラスにインプットする。
+        解の情報を受け取り標準出力に出力する。
 
         """
 
-        answer_list = solution.get_stamp_answer_list()
+        answer_list = []
+        for pressing_info in solution.get_stamp_answer_list():
+            combined_stamp = pressing_info[0]
+            slide_x        = pressing_info[1]
+            slide_y        = pressing_info[2]
+
+            # スタンプを構成するorigin stampを平行移動したのち answer_list に追加
+            for origin_stamp in combined_stamp.get_origin_stamp_list():
+                answer_list.append((origin_stamp[0], origin_stamp[1]+slide_x, origin_stamp[2]+slide_y))
+
+        # TODO: 重複したスタンプを間引く処理を実装
         print(len(answer_list))
         for triple in (answer_list):
             print(str(triple[0])+";"+str(triple[1])+","+str(triple[2]))
