@@ -68,7 +68,7 @@ class RandomSolver(Solver):
         for j in range(100):
             parallel_translation_x = int(random.uniform(0, Field.field_x_size))
             parallel_translation_y = int(random.uniform(0, Field.field_y_size))
-            stamp_object_count = int(random.uniform(0, len(instance.stamp_object_list)-1))
+            stamp_object_count = random.randint(0, len(instance.stamp_object_list)-1)
             temp_solution.add_stamp_answer(instance.stamp_object_list[stamp_object_count].idx,
                                            parallel_translation_x,
                                            parallel_translation_y)
