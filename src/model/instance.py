@@ -1,11 +1,14 @@
+import copy
 class Instance:
     """
     Stampクラスのオブジェクトリストをセット/ゲットするクラス。
 
     Attributes
     ----------
-    stamp_object_list : array-like
-    stampオブジェクトを格納するリスト。
+    origin_stamp_object_list : array-like
+        origin stampのオブジェクトを保持するリスト。
+    combined_stamp_object_list : array-like
+        combined stampのオブジェクトを保持するリスト。
     """
 
     def __init__(self):
@@ -14,9 +17,10 @@ class Instance:
 
         """
 
-        self.stamp_object_list = []
+        self.origin_stamp_object_list = []
+        self.combined_stamp_object_list = []
 
-    def set_stamp_object(self, stamp_object):
+    def set_origin_stamp_object(self, stamp_object):
         """
         引数のStampクラスのオブジェクトをstamp_object_listにセットする。
         Parameters
@@ -25,22 +29,27 @@ class Instance:
             Stampクラスのオブジェクト。
         """
 
-        self.stamp_object_list.extend(stamp_object)
+        self.origin_stamp_object_list.extend(stamp_object)
 
-    def get_stamp_object_list(self):
+    # できるだけ面積の小さい combined stamp を構築する
+    def make_combined_stamp_list(self):
+        # TODO: 実装する。ひとまず、original stamp をそのまま使う。
+        self.combined_stamp_object_list = copy.deepcopy(self.origin_stamp_object_list)
+
+    def get_combined_stamp_object_list(self):
         """
-        stamp_object_listをゲットする。
+        combined_stamp_object_listをゲットする。
 
         Returns
         ----------
-        stamp_object_list : list-array
+        combined_stamp_object_list : list-array
             Stampクラスのオブジェクトを格納するリスト。
         """
 
-        return self.stamp_object_list
+        return self.combined_stamp_object_list
 
 
 if __name__ == "__main__":
     temp_instance = Instance()
     temp_instance.set_stamp_object("aaaa")
-    print(temp_instance.get_stamp_object_list())
+    print(temp_instance.get_combined_stamp_object_list())

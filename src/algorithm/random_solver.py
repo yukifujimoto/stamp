@@ -68,11 +68,12 @@ class RandomSolver(Solver):
         for j in range(100):
             parallel_translation_x = random.randint(0, Field.field_x_size)
             parallel_translation_y = random.randint(0, Field.field_y_size)
-            stamp_object_count = random.randint(0, len(instance.stamp_object_list)-1)
-            temp_solution.add_stamp_answer(instance.stamp_object_list[stamp_object_count].idx,
+            # TODO: instance.combined_stamp_object_list[] にgetterを介さずアクセスしてしまっている。修正すべき。
+            stamp_object_count = random.randint(0, len(instance.combined_stamp_object_list)-1)
+            temp_solution.add_stamp_answer(instance.combined_stamp_object_list[stamp_object_count],
                                            parallel_translation_x,
                                            parallel_translation_y)
-            temp_field.press_stamp(instance.stamp_object_list[stamp_object_count],
+            temp_field.press_stamp(instance.combined_stamp_object_list[stamp_object_count],
                                    parallel_translation_x,
                                    parallel_translation_y)
         return temp_solution, temp_field

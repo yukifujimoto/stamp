@@ -11,7 +11,8 @@ class Solution:
     Attributes
     ----------
     stamp_answer_list : array-like
-        問題の解（スタンプを押す座標）のリスト。
+        解を表す3-tupleのリスト。
+        3-tupeのレイアウトは (Stampオブジェクト, x軸方向への平行移動距離, y軸方向への平行移動距離)
 
     """
 
@@ -23,22 +24,22 @@ class Solution:
 
         self.stamp_answer_list = []
 
-    def add_stamp_answer(self, idx, x, y):
+    def add_stamp_answer(self, stamp_object, x, y):
         """
         stamp_answer_listに解（スタンプを押す座標）を追加する。
 
         Parameters
     　　----------
-    　　idx : int
-            スタンプのインデックス。
+    　　stamp_object : Stamp
+            スタンプのオブジェクト。
         x : int
-            スタンプを押すx座標。
+            スタンプをx座標方向に平行移動させる距離。
         y : int
-            スタンプを押すy座標。
+            スタンプをy座標方向に平行移動させる距離。
 
         """
 
-        self.stamp_answer_list.append((idx, x, y))
+        self.stamp_answer_list.append((stamp_object, x, y))
 
     def get_stamp_answer_list(self):
         """
