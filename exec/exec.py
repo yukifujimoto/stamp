@@ -4,6 +4,8 @@ from src.model.instance import Instance
 from src.util.io import IO
 from src.algorithm.random_solver import RandomSolver
 from src.algorithm.ramdom_solver_divide import RandomSolverDivide
+from src.algorithm.random_solver_divide_using_greedy import RandomSolverDivideUsingGreedy
+
 
 # 問題の読み取り
 io = IO()
@@ -16,7 +18,8 @@ instance.make_combined_stamp_list()
 
 # ソルバーの生成 & 解の計算
 #solver = RandomSolver() # ここを切り替えることによって実行するアルゴリズムを変更できる
-solver = RandomSolverDivide() # ここを切り替えることによって実行するアルゴリズムを変更できる
+#solver = RandomSolverDivide() # ここを切り替えることによって実行するアルゴリズムを変更できる
+solver = RandomSolverDivideUsingGreedy() # ここを切り替えることによって実行するアルゴリズムを変更できる
 solution = solver.calc_solution(instance)
 
 # 解の出力

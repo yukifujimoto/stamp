@@ -1,3 +1,4 @@
+import copy
 from src.model.stamp import Stamp
 
 
@@ -79,6 +80,64 @@ class Field:
                 self.my_field[candidate_press_y][candidate_press_x] = 0
             else:
                 print("pass")
+
+    def press_stamp_using_greedy(self, Stamp_object, parallel_translation_x, parallel_translation_y):
+        """
+        my_fieldにスタンプを押す。
+　　　　
+        Parameters        　　
+        ----------
+        Stamp_object : Stamp
+            Stampクラスのオブジェクト。
+        parallel_translation_x : int
+            x軸方向に平行移動するx座標。
+        parallel_translation_y : int
+            y軸方向に平行移動するy座標。
+        """
+
+        #  貪欲法アルゴリズムに使用するリスト
+        press_stamp_coordinate_list = []
+        prev_my_field = []
+        prev_my_field = copy.deepcopy(self.my_field)
+
+        #  スタンプの黒いセルの座標リストを格納
+        press_black_cell_coordinate_list = Stamp_object.get_black_cell_coordinate()
+
+        #  黒いセルの座標分、繰り返し処理
+        for press_tuple in press_black_cell_coordinate_list:
+            candidate_press_x = press_tuple[1] + parallel_translation_x
+            candidate_press_y = press_tuple[0] + parallel_translation_y
+
+            #  candidate_press_xとcandidate_press_yどちらか、myfield以外の座標を指定した場合、continueする
+            if candidate_press_x < 0 or candidate_press_y < 0 or candidate_press_x >= Field.field_x_size or candidate_press_y >= Field.field_y_size:
+                continue
+
+            #  スタンプを押す候補の座標が「0」の場合、「1」を代入
+            if self.my_field[candidate_press_y][candidate_press_x] == 0:
+                self.my_field[candidate_press_y][candidate_press_x] = 1
+            #  スタンプを押す候補の座標が「1」の場合、「0」に代入
+            elif self.my_field[candidate_press_y][candidate_press_x] == 1:
+                self.my_field[candidate_press_y][candidate_press_x] = 0
+            else:
+                print("pass")
+
+            #  スタンプを押した座標をリストに追加する
+            press_stamp_coordinate_list.append((candidate_press_y, candidate_press_x))
+
+        #  貪欲法
+        if press_stamp_coordinate_list:
+            press_stamp_total_value = 0
+            unique_press_stamp_coordinate_list = list(set(press_stamp_coordinate_list))
+            for unique_press_stamp_coordinate in unique_press_stamp_coordinate_list:
+                press_stamp_total_value += self.my_field[unique_press_stamp_coordinate[0] - 1][
+                    unique_press_stamp_coordinate[1] - 1]
+            if press_stamp_total_value > 0:
+                return True
+            else:
+                self.my_field = copy.deepcopy(prev_my_field)
+                return False
+        else:
+            return False
 
     @classmethod
     def set_target_field(cls, target_field_information):
