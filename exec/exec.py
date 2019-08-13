@@ -3,6 +3,7 @@ sys.path.append("../")
 from src.model.instance import Instance
 from src.util.io import IO
 from src.algorithm.random_solver import RandomSolver
+from src.algorithm.ramdom_solver_divide import RandomSolverDivide
 
 # 問題の読み取り
 io = IO()
@@ -14,7 +15,8 @@ instance.set_origin_stamp_object(io.stamp_object_list)
 instance.make_combined_stamp_list()
 
 # ソルバーの生成 & 解の計算
-solver = RandomSolver() # ここを切り替えることによって実行するアルゴリズムを変更できる
+#solver = RandomSolver() # ここを切り替えることによって実行するアルゴリズムを変更できる
+solver = RandomSolverDivide() # ここを切り替えることによって実行するアルゴリズムを変更できる
 solution = solver.calc_solution(instance)
 
 # 解の出力
