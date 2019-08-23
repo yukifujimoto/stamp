@@ -1,4 +1,6 @@
 import copy
+
+
 class Instance:
     """
     Stampクラスのオブジェクトリストをセット/ゲットするクラス。
