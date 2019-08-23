@@ -50,9 +50,12 @@ class IO:
                 answer_list.append((origin_stamp[0], origin_stamp[1]+slide_x, origin_stamp[2]+slide_y))
 
         # TODO: 重複したスタンプを間引く処理を実装
-        print(len(answer_list))
-        for triple in (answer_list):
-            print(str(triple[0])+";"+str(triple[1])+","+str(triple[2]))
+        len_answer_list = len(answer_list)
+        len_prev_answer_list = len_answer_list - 1
+        print(len_answer_list)
+        for i in range(len_prev_answer_list):
+            print(str(answer_list[i][0])+";"+str(answer_list[i][1])+","+str(answer_list[i][2]))
+        sys.stdout.write(str(answer_list[len_answer_list-1][0]) + ";" + str(answer_list[len_answer_list-1][1]) + "," + str(answer_list[len_answer_list-1][2]))
 
 if __name__ == "__main__":
     temp_IO = IO()
