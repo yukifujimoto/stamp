@@ -1,4 +1,5 @@
 import sys
+import copy
 sys.path.append("../../")
 from src.model.stamp import Stamp
 
@@ -11,7 +12,8 @@ class CombinedStampMaker():
     def __init__(self):
         pass
 
-    def make_combined_stamp(instance):
+    @staticmethod
+    def make_combined_stamp_instance(instance):
         """
         与えられたインスタンス中のスタンプを用いて、できるだけ黒いセルの少ないスタンプを構成する。
 
@@ -26,7 +28,10 @@ class CombinedStampMaker():
         　combined stamp object listにスタンプを詰め込んだInstanceオブジェクト
         
         """
-        # TODO 実装する
+        # TODO ちゃんと実装する。とりあえずoriginスタンプをそのままcombinedスタンプとして使う
+        new_instance = copy.deepcopy(instance)
+        new_instance.combined_stamp_object_list = copy.deepcopy(new_instance.origin_stamp_object_list)
+        return new_instance
     
     @staticmethod
     def __is_rectangle(stamp_object):
