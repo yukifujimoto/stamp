@@ -17,8 +17,8 @@ class Instance:
 
         """
 
-        self.__origin_stamp_object_list = []
-        self.__combined_stamp_object_list = []
+        self.origin_stamp_object_list = []
+        self.combined_stamp_object_list = []
 
     def set_origin_stamp_object(self, stamp_object):
         """
@@ -29,7 +29,7 @@ class Instance:
             Stampクラスのオブジェクト。
         """
 
-        self.__origin_stamp_object_list.extend(stamp_object)
+        self.origin_stamp_object_list.extend(stamp_object)
     
     def get_origin_stamp_object_list(self):
         """
@@ -40,7 +40,7 @@ class Instance:
         combined_stamp_object_list : list-array
             Stampクラスのオブジェクトを格納するリスト。
         """
-        return self.__origin_stamp_object_list
+        return self.origin_stamp_object_list
 
     def get_combined_stamp_object_list(self):
         """
@@ -52,4 +52,4 @@ class Instance:
             Stampクラスのオブジェクトを格納するリスト。
         """
 
-        return self.__combined_stamp_object_list
+        return self.combined_stamp_object_list
