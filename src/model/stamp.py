@@ -4,15 +4,12 @@ class Stamp:
 
     Attributes
     ----------
-    indices : array-like
-        スタンプを構成するオリジナルスタンプの情報を保持する3-tupeの配列。
-        3-tupleのレイアウトは (index, x軸方向への平行移動距離, y軸方向の平行移動距離)。
+    origin_stamp_list : array-like
+    　　自身を構成するoriginal stampのリスト。
     stamp_x_size : int
         スタンプのx軸方向サイズ。
     stamp_y_size : int
         スタンプのy軸方向サイズ。
-    definition_of_stamp_picture : str
-        スタンプの絵の定義。
     black_cell_coordinate_list : array-like
         スタンプの黒いセルの座標を格納する配列
     """
