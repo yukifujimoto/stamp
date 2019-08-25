@@ -14,7 +14,7 @@ class Stamp:
         スタンプの黒いセルの座標を格納する配列
     """
 
-    def __init__(self, idx=-1, input_str=""):
+    def __init__(self, idx=-1, input_str="1;1;1"):
         """
         引数ありのコンストラクタ。
 
@@ -52,6 +52,17 @@ class Stamp:
             黒いセルの座標をタプルで格納したリスト。
         """
         return self.black_cell_coordinate_list
+    
+    def set_black_cell_coordinate(self, black_cell_coordinate_list):
+        """
+        スタンプの黒いセルの座標を表すリストをセットする。
+
+        Parameters
+        ----------
+        black_cell_coordinate : array-like
+        　黒いセルの座標をタプルで格納したリスト。
+        """
+        self.black_cell_coordinate_list = black_cell_coordinate_list
 
     def get_origin_stamp_list(self):
         """
