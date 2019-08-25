@@ -21,7 +21,8 @@ class Stamp:
         Parameters
     　　----------
     　　idx : int
-            スタンプのインデックス。
+            スタンプのインデックス。originalスタンプの場合のみセットされる。
+            combindedスタンプの場合はデフォルトの-1がセットされる。
         input_str : str
             スタンプの定義（x軸方向サイズ；y 軸方向サイズ；絵の定義）。
         """
