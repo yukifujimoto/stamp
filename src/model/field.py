@@ -216,6 +216,19 @@ class Field:
             if total_value == 0:
                 continue
             cls.random_target_field.append(total_value_idx)
+    
+    @classmethod
+    def get_field_size(cls):
+        """
+        フィールドのサイズを取得する
+
+        Returns
+        ----------
+        field_x_size, field_y_size
+        　フィールドのx方向のサイズ, y方向のサイズ
+        """
+
+        return cls.field_x_size, cls.field_y_size
 
 if __name__ == "__main__":
     # case 0
