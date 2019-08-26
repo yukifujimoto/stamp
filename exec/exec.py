@@ -22,7 +22,7 @@ solver = RandomSolver() # ここを切り替えることによって実行する
 solution = solver.calc_solution(instance)
 
 # 解の出力
-io.output_solution(solution)
+io.output_solution(solution, field_x_size, field_y_size)
 
 if __name__ == "__main__":
     '''
