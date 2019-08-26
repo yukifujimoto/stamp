@@ -1,6 +1,7 @@
 import sys
 sys.path.append("../")
 from src.model.instance import Instance
+from src.model.field import Field
 from src.util.io import IO
 from src.algorithm.random_solver import RandomSolver
 from src.algorithm.combined_stamp_maker import CombinedStampMaker
@@ -12,7 +13,9 @@ instance = Instance()
 instance.set_origin_stamp_object(io.stamp_object_list)
 
 # できるだけ面積の小さいcombined stampの作成
-instance = CombinedStampMaker.make_combined_stamp_instance(instance)
+field_x_size, field_y_size = Field.get_field_size()
+combined_stamp_maker = CombinedStampMaker(field_x_size, field_y_size)
+instance = combined_stamp_maker.make_combined_stamp_instance(instance)
 
 # ソルバーの生成 & 解の計算
 solver = RandomSolver() # ここを切り替えることによって実行するアルゴリズムを変更できる
