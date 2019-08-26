@@ -15,7 +15,9 @@ class StampShape(Enum):
     RECTANGLE_OTHER = 3        # その他の長方形スタンプ
     NON_RECTANGLE = 4          # 長方形ではないスタンプ
 
-
+# TODO:
+# このクラス中ではよく考えずdeepcopyしまくっている.
+# パフォーマンスに影響するため、非破壊的メソッド中ではdeepcopyしないなどのリファクタを検討すべき。
 class CombinedStampMaker():
     """
     Combined Stamp を作成するクラス。
@@ -27,8 +29,7 @@ class CombinedStampMaker():
         self.field_size_y = field_size_y
 
 
-    @staticmethod
-    def make_combined_stamp_instance(instance):
+    def make_combined_stamp_instance(self, instance):
         """
         与えられたインスタンス中のスタンプを用いて、できるだけ黒いセルの少ないスタンプを構成する。
 
@@ -44,10 +45,68 @@ class CombinedStampMaker():
         
         """
 
-        # TODO ちゃんと実装する。とりあえずoriginスタンプをそのままcombinedスタンプとして使う
         new_instance = copy.deepcopy(instance)
         new_instance.combined_stamp_object_list = copy.deepcopy(new_instance.origin_stamp_object_list)
+        
+        min_stamp_area = 64 * 64 
+        min_stamp = None
+        for stamp in new_instance.get_origin_stamp_object_list():
+            if not CombinedStampMaker.__get_stamp_shape(stamp) == StampShape.NON_RECTANGLE:
+                # 長方形のスタンプが存在する場合、面積1のセルを作成する
+                new_instance.set_combined_stamp_object_list([self.__make_singlecell_by_rectangle(stamp)])
+                return new_instance
+            else:
+                # そうでない場合、面積のできるだけ小さなスタンプを求める
+                x_length, y_length = CombinedStampMaker.__get_stamp_width_and_length(stamp)
+                if x_length * y_length < min_stamp_area:
+                    min_stamp = copy.deepcopy(stamp)
+        new_instance.set_combined_stamp_object_list([min_stamp])
         return new_instance
+
+    def __make_singlecell_by_rectangle(self, rectangle_stamp):
+        """
+        長方形スタンプを組み合わせて大きさが1のスタンプを構成する。
+        
+        Parameters
+        ----------
+        rectangle_stamp : Stamp
+        　長方形判定済のStampオブジェクト
+
+        Returns
+        ----------
+        combined_stamp : Stamp
+　　　　 　大きさが1のcombinedスタンプ
+        """
+
+        combined_stamp = copy.deepcopy(rectangle_stamp)
+
+        black_cell_coordinate = rectangle_stamp.get_black_cell_coordinate()
+        x_length, y_length = CombinedStampMaker.__get_stamp_width_and_length(rectangle_stamp)
+
+        # Phase 1. 高さを1にする
+        temp_stamp = copy.deepcopy(combined_stamp)
+        if y_length != 1:
+            for i in range(int(self.field_size_y / y_length) + 1):
+                # スタンプを一つ下ずらして押す -> y_length-1だけ下にずらして押す
+                combined_stamp = CombinedStampMaker.__combine_two_stamp(combined_stamp, temp_stamp, 0, 1 + i*y_length)
+                combined_stamp = CombinedStampMaker.__combine_two_stamp(combined_stamp, temp_stamp, 0, y_length + i*y_length)
+        
+        # Phase 2. 幅を1にする
+        temp_stamp = copy.deepcopy(combined_stamp)
+        if x_length != 1:
+            for i in range(int(self.field_size_x / x_length) + 1):
+                # スタンプを右に一つずらして押す -> x_length-1ｄだけ右にずらして押す
+                combined_stamp = CombinedStampMaker.__combine_two_stamp(combined_stamp, temp_stamp, 1 + i*x_length , 0)
+                combined_stamp = CombinedStampMaker.__combine_two_stamp(combined_stamp, temp_stamp, x_length + i*x_length, 0)
+
+        # Phase 3. 余分な黒いセルを削除する
+        black_cell_coordinate = copy.deepcopy(combined_stamp.get_black_cell_coordinate())
+        for (y, x) in combined_stamp.get_black_cell_coordinate():
+            if x < 0 or x >= combined_stamp.stamp_x_size or y < 0 or y >= combined_stamp.stamp_y_size:
+               black_cell_coordinate.remove((y,x))
+        combined_stamp.set_black_cell_coordinate(black_cell_coordinate)
+
+        return combined_stamp
 
     
     @staticmethod
@@ -96,49 +155,6 @@ class CombinedStampMaker():
 
         return combined_stamp
     
-    def __make_singlecell_by_rectangle(self, rectangle_stamp, enum_stamp_shape):
-        """
-        長方形スタンプを組み合わせて大きさが1のスタンプを構成する。
-        
-        Parameters
-        ----------
-        rectangle_stamp : Stamp
-        　長方形判定済のStampオブジェクト
-
-        Returns
-        ----------
-        combined_stamp : Stamp
-　　　　 　大きさが1のcombinedスタンプ
-        """
-
-        combined_stamp = copy.deepcopy(rectangle_stamp)
-
-        # 入力されたスタンプが既に面積1のセルならそのままリターン
-        if enum_stamp_shape == StampShape.RECTANGLE_SINGLE_CELL:
-            return combined_stamp
-        
-        black_cell_coordinate = rectangle_stamp.get_black_cell_coordinate()
-        x_length, y_length = CombinedStampMaker.__get_stamp_width_and_length(rectangle_stamp)
-
-        # Phase 1. 高さを1にする
-        if y_length != 1:
-            for i in range(480):
-                pass
-                # スタンプを一つ上にずらして押す
-
-                # スタンプをy_length-1上にずらして押す
-
-        # Phase 2. 幅を1にする
-        if x_length != 1:
-            for i in range(640):
-                pass
-
-                # スタンプを右に一つずらして押す
-
-                # スタンプをx_length-1右にずらして押す
-
-        return combined_stamp
-
 
     @staticmethod
     def __get_stamp_shape(stamp_object):
@@ -201,7 +217,7 @@ class CombinedStampMaker():
                     x_min = min(x_min, ind_x)
                     y_max = max(y_max, ind_y)
                     y_min = min(y_min, ind_y)
-        return x_max-x_min+1, y_max-y_min+1
+        return x_max - x_min + 1, y_max - y_min + 1
     
 
 
@@ -266,7 +282,6 @@ if __name__ == "__main__":
     assert CombinedStampMaker._CombinedStampMaker__get_stamp_width_and_length(stamp1_6) == (1,3), "Case 1-6. Fail!"
     assert CombinedStampMaker._CombinedStampMaker__get_stamp_shape(stamp1_6) == StampShape.RECTANGLE_WIDTH_1, "Case 1-6. Fail!"
 
-
     """
     2. __combine_two_stamp Test
     """
@@ -319,5 +334,59 @@ if __name__ == "__main__":
             if (y,x) in black_cell_coordinate:
                 count_black_cell += 1
     assert count_black_cell == 1, "Case 2-2. Fail!"
+
+    """
+    3. __make_singlecell_by_rectangle Test
+    """ 
+    # Case 3-1. 通常のスタンプのケース
+    # stamp = 
+    # 00000
+    # 01110
+    # 01110
+    # 00000
+    stamp = Stamp(input_str="5;4;00000011100111000000")
+    combined_stamp_maker = CombinedStampMaker(field_size_x=10, field_size_y=20)
+    single_cell_stamp = combined_stamp_maker._CombinedStampMaker__make_singlecell_by_rectangle(stamp)
+    assert len(single_cell_stamp.get_black_cell_coordinate()) == 1, "Case 3-1. Fail!"
+
+    # Case 3-2. 少し大きなスタンプのケース
+    # stamp = 
+    # 0000000000000
+    # 0111111111100
+    # 0111111111100
+    # 0111111111100
+    # 0111111111100
+    # 0111111111100
+    stamp = Stamp(input_str="13;6;000000000000001111111111000111111111100011111111110001111111111000111111111100")
+    combined_stamp_maker = CombinedStampMaker(field_size_x=30, field_size_y=20)
+    single_cell_stamp = combined_stamp_maker._CombinedStampMaker__make_singlecell_by_rectangle(stamp)
+    assert len(single_cell_stamp.get_black_cell_coordinate()) == 1, "Case 3-2. Fail!"
+
+    # Case 3-3. 高さが1のスタンプのケース
+    # stamp = 
+    # 0000000000000
+    # 0000000000000
+    # 0000000000000
+    # 0111111111100
+    # 0000000000000
+    # 0000000000000
+    stamp = Stamp(input_str="13;6;000000000000000000000000000000000000000011111111110000000000000000000000000000")
+    combined_stamp_maker = CombinedStampMaker(field_size_x=30, field_size_y=20)
+    single_cell_stamp = combined_stamp_maker._CombinedStampMaker__make_singlecell_by_rectangle(stamp)
+    assert len(single_cell_stamp.get_black_cell_coordinate()) == 1, "Case 3-3. Fail!"
+
+    # Case 3-4. 幅がのスタンプのケース
+    # stamp = 
+    # 0000000010000
+    # 0000000010000
+    # 0000000010000
+    # 0000000010000
+    # 0000000010000
+    # 0000000010000
+    stamp = Stamp(input_str="13;6;000000001000000000000100000000000010000000000001000000000000100000000000010000")
+    combined_stamp_maker = CombinedStampMaker(field_size_x=30, field_size_y=20)
+    single_cell_stamp = combined_stamp_maker._CombinedStampMaker__make_singlecell_by_rectangle(stamp)
+    assert len(single_cell_stamp.get_black_cell_coordinate()) == 1, "Case 3-4. Fail!"
+
     
     
