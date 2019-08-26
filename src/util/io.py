@@ -33,7 +33,7 @@ class IO:
 
     # Solutionクラスのオブジェクトを受け取り、標準出力に表示
     @staticmethod
-    def output_solution(solution):
+    def output_solution(solution, field_x_size, field_y_size):
         """
         解の情報を受け取り標準出力に出力する。
 
@@ -47,15 +47,31 @@ class IO:
 
             # スタンプを構成するorigin stampを平行移動したのち answer_list に追加
             for origin_stamp in combined_stamp.get_origin_stamp_list():
-                answer_list.append((origin_stamp[0], origin_stamp[1]+slide_x, origin_stamp[2]+slide_y))
+                after_stamp = (origin_stamp[0], origin_stamp[1]+slide_x, origin_stamp[2]+slide_y)
+                if after_stamp[1] > field_x_size or after_stamp[2] > field_y_size:
+                    continue
+                answer_list.append(after_stamp)
+                # 同じスタンプを同じ場所に押す場合は、反転させる（=押さなかったことにする）
+                """
+                if after_stamp in answer_list:
+                    answer_list.remove(after_stamp)
+                else:
+                   answer_list.append(after_stamp)
+                """
 
-        # TODO: 重複したスタンプを間引く処理を実装
         len_answer_list = len(answer_list)
         len_prev_answer_list = len_answer_list - 1
         print(len_answer_list)
-        for i in range(len_prev_answer_list):
-            print(str(answer_list[i][0])+";"+str(answer_list[i][1])+","+str(answer_list[i][2]))
-        sys.stdout.write(str(answer_list[len_answer_list-1][0]) + ";" + str(answer_list[len_answer_list-1][1]) + "," + str(answer_list[len_answer_list-1][2]))
+        #for i in range(len_prev_answer_list):
+        #    print(str(answer_list[i][0])+";"+str(answer_list[i][1])+","+str(answer_list[i][2]))
+        #sys.stdout.write(str(answer_list[len_answer_list-1][0]) + ";" + str(answer_list[len_answer_list-1][1]) + "," + str(answer_list[len_answer_list-1][2]))
+
+    @staticmethod
+    def __delete_output_field_stamp(solution, field_x_size, field_y_size):
+        """
+        フィールド外に押されたスタンプを削除する。
+        """
+        pass
 
 if __name__ == "__main__":
     temp_IO = IO()
