@@ -53,3 +53,15 @@ class Instance:
         """
 
         return self.combined_stamp_object_list
+
+    def set_combined_stamp_object_list(self, combined_stamp_object_list):
+        """
+        combined_stamp_object_listをセットする。
+
+        Parameters
+        ----------
+        combined_stamp_object_list : list-array
+            Stampクラスのオブジェクトを格納するリスト。
+        """
+
+        self.combined_stamp_object_list = combined_stamp_object_list
