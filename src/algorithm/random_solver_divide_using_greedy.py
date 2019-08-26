@@ -43,20 +43,15 @@ class RandomSolverDivideUsingGreedy(Solver):
         #  フィールドを分割する
         Field.divide_field(20, 20)
 
-        #  ループの回数を求める
-        while_loop_count = 0
-
         while temp_sw.get_elapsed_time() < 9.5:
-            while_loop_count += 1
-            temp_solution, temp_field = RandomSolverDivideUsingGreedy.make_candidate_solution(instance)
+            temp_solution, temp_field = RandomSolverDivideUsingGreedy.make_candidate_solution(instance, temp_sw)
             if temp_field.num_of_matches_with_target_field() > best_value:
                 current_best_solution = temp_solution
                 best_value = temp_field.num_of_matches_with_target_field()
-        print(while_loop_count)
         return current_best_solution
 
     @staticmethod
-    def make_candidate_solution(instance):
+    def make_candidate_solution(instance, temp_sw):
         """
         最適解候補のSolutionオブジェクトを作成する。
 
@@ -73,6 +68,10 @@ class RandomSolverDivideUsingGreedy(Solver):
 
         #  スタンプを100回押した結果のSolution、Fieldクラスのオブジェクトを生成する
         for j in range(100):
+
+            #  9.5秒超えた場合、処理を中断する
+            if temp_sw.get_elapsed_time() > 9.5:
+                break
 
             random_target_index = random.choice(Field.random_target_field)
             random_target_coordinate_list = Field.divide_list[random_target_index]

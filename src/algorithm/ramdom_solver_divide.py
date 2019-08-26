@@ -43,16 +43,11 @@ class RandomSolverDivide(Solver):
         #  フィールドを分割する
         Field.divide_field(20, 20)
 
-        #  ループの回数を求める
-        while_loop_count = 0
-
         while temp_sw.get_elapsed_time() < 9.5:
-            while_loop_count += 1
             temp_solution, temp_field = RandomSolverDivide.make_candidate_solution(instance)
             if temp_field.num_of_matches_with_target_field() > best_value:
                 current_best_solution = temp_solution
                 best_value = temp_field.num_of_matches_with_target_field()
-        print(while_loop_count)
         return current_best_solution
 
     @staticmethod
